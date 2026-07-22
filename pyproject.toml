@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "honest-drive-mcp"
+version = "0.1.0"
+description = "Local MCP server for Google Drive with full permission management — read, write, share files with your Google account."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Bartosz Kuć", email = "firma@bartosza.pl" }]
+keywords = ["mcp", "google-drive", "drive", "google", "files"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "mcp>=1.0.0",
+    "google-auth>=2.0.0",
+    "google-auth-oauthlib>=1.0.0",
+    "google-api-python-client>=2.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/bartosz-kuc/honest-drive-mcp"
+Repository = "https://github.com/bartosz-kuc/honest-drive-mcp"
+Issues = "https://github.com/bartosz-kuc/honest-drive-mcp/issues"
+
+[project.scripts]
+honest-drive-mcp = "honest_drive_mcp:sync_main"
+
+[tool.hatch.build.targets.wheel]
+sources = ["."]
+only-include = ["server.py"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"server.py" = "honest_drive_mcp.py"
+
+[tool.hatch.build.targets.sdist]
+include = ["server.py", "README.md", "LICENSE", "SECURITY.md", "pyproject.toml"]
