@@ -24,9 +24,10 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload, MediaIoBaseUpload
+from mcp import types
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import TextContent, Tool
+from mcp.types import CallToolResult, ListToolsResult, TextContent, Tool
 
 # Full drive scope needed for sharing/permission management (the whole point of this MCP).
 SCOPES = ["https://www.googleapis.com/auth/drive"]
@@ -53,8 +54,7 @@ def get_service():
 server = Server("drive-personal")
 
 
-@server.list_tools()
-async def list_tools() -> list[Tool]:
+async def _list_tools() -> list[Tool]:
     return [
         Tool(
             name="list_files",
@@ -180,8 +180,7 @@ GOOGLE_EXPORT_MAP = {
 TEXT_MIME_PREFIXES = ("text/", "application/json", "application/xml", "application/javascript")
 
 
-@server.call_tool()
-async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
+async def _call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
     svc = get_service()
 
     if name == "list_files":
@@ -312,6 +311,18 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
         }))]
 
     raise ValueError(f"Unknown tool: {name}")
+
+
+async def on_list_tools(ctx, params) -> ListToolsResult:
+    return ListToolsResult(tools=await _list_tools())
+
+
+async def on_call_tool(ctx, params) -> CallToolResult:
+    return CallToolResult(content=await _call_tool(params.name, params.arguments or {}))
+
+
+server.add_request_handler("tools/list", types.PaginatedRequestParams, on_list_tools)
+server.add_request_handler("tools/call", types.CallToolRequestParams, on_call_tool)
 
 
 async def main():
