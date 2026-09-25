@@ -45,13 +45,13 @@ Google Cloud steps (same as honest-gmail-mcp):
 2. **APIs & Services → Library** → enable **Google Drive API**
 3. **APIs & Services → Credentials → OAuth client ID → Desktop app** → download JSON → save as `credentials.json` here
 
-First run:
+Authorize (one-time OAuth):
 
 ```bash
-./venv/bin/python server.py
+./venv/bin/python -c "import server; server.get_service()"
 ```
 
-Browser opens → Allow → token saved to `token.json`. Ctrl+C.
+Browser opens → Allow → token saved to `token.json` (or `DRIVE_TOKEN_PATH`). If you skip this step, the server starts the same flow on the first tool call. Running `server.py` on its own does not start OAuth — it waits for an MCP client on stdin.
 
 Register with Claude Code:
 
