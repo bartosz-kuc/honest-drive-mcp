@@ -38,6 +38,8 @@ python3 -m venv venv
 ./venv/bin/pip install -r requirements.txt
 ```
 
+On Windows use `venv\Scripts\pip` and `venv\Scripts\python` instead of the `venv/bin/...` paths shown throughout this README.
+
 Google Cloud steps (same as honest-gmail-mcp):
 1. https://console.cloud.google.com/ → create or select project
 2. **APIs & Services → Library** → enable **Google Drive API**
@@ -67,6 +69,24 @@ Claude Desktop `claude_desktop_config.json`:
       "args": ["/absolute/path/to/server.py"]
     }
   }
+}
+```
+
+### Configuration (optional)
+
+By default `credentials.json` and `token.json` are read from (and the token written to) the directory containing `server.py`. Two env vars override this, e.g. for one instance per Google account, or when installed from PyPI (pip/uvx), where that directory is the package's install location:
+
+| Env var | Default | Purpose |
+|---|---|---|
+| `DRIVE_CREDENTIALS_PATH` | `credentials.json` next to `server.py` | OAuth client file |
+| `DRIVE_TOKEN_PATH` | `token.json` next to `server.py` | OAuth token file (written after browser consent on the first tool call; its directory must exist) |
+
+Use absolute paths, e.g. in `claude_desktop_config.json`:
+
+```json
+"env": {
+  "DRIVE_CREDENTIALS_PATH": "/absolute/path/to/credentials.json",
+  "DRIVE_TOKEN_PATH": "/absolute/path/to/token.json"
 }
 ```
 
@@ -121,5 +141,4 @@ MIT — see [LICENSE](LICENSE).
 
 - [honest-gmail-mcp](https://github.com/bartosz-kuc/honest-gmail-mcp) — local Gmail MCP
 - [honest-calendar-mcp](https://github.com/bartosz-kuc/honest-calendar-mcp) — local Google Calendar MCP
-- [ksef-mcp](https://github.com/bartosz-kuc/ksef-mcp) — Polish KSeF (e-invoicing) MCP
-- [nip-krs-mcp](https://github.com/bartosz-kuc/nip-krs-mcp) — Polish company registry MCP
+- [honest-nip-krs-mcp](https://github.com/bartosz-kuc/honest-nip-krs-mcp) — Polish company registry MCP (biała lista + KRS)

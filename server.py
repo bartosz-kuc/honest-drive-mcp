@@ -16,6 +16,7 @@ import asyncio
 import base64
 import io
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -33,8 +34,11 @@ from mcp.types import CallToolResult, ListToolsResult, TextContent, Tool
 SCOPES = ["https://www.googleapis.com/auth/drive"]
 
 HERE = Path(__file__).parent
-CRED_PATH = HERE / "credentials.json"
-TOKEN_PATH = HERE / "token.json"
+# Paths default to files next to this module but are env-configurable, mirroring
+# honest-gmail-mcp / honest-calendar-mcp. Useful for pip/uvx installs (where the
+# module lives in site-packages) and for running one instance per Google account.
+CRED_PATH = Path(os.environ.get("DRIVE_CREDENTIALS_PATH", str(HERE / "credentials.json")))
+TOKEN_PATH = Path(os.environ.get("DRIVE_TOKEN_PATH", str(HERE / "token.json")))
 
 
 def get_service():
