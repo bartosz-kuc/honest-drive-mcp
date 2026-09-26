@@ -6,12 +6,12 @@
     "url": "https://github.com/bartosz-kuc/honest-drive-mcp",
     "source": "github"
   },
-  "version": "0.1.0",
+  "version": "0.2.0",
   "packages": [
     {
       "registry_name": "pypi",
       "name": "honest-drive-mcp",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "runtime_hint": "uvx"
     }
   ]
